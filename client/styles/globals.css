@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/*Gradient Animation*/
+@keyframes swirl {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+.animate-swirl {
+        animation: swirl 10s linear infinite;
+      }
+
+/*Shadow*/
+.shadow-white-40 {
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
+}
+
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.group:hover .animate-scroll {
+  animation-play-state: paused;
+}
+.animate-scroll {
+  animation: scrollLoop 10s linear infinite;
+}
+
+@keyframes scrollLoop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Add this to your global CSS file */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.bg-water {
+  background: linear-gradient(
+    135deg,
+    #001a20 25%,   /* deep sea green-blue */
+    #013440 50%,   /* dark teal */
+    #001f2d 75%    /* deep navy */
+  );
+  background-size: 1000px 100px;
+  animation: waterFlow 12s linear infinite;
+}
+
+@keyframes waterFlow {
+  0% { background-position: 0 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes sparklePath {
+  0% {
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 10px;
+    transform: translateX(0) translateY(0);
+  }
+
+  20% {
+    top: 0;
+    left: 100%;
+    width: 50px;
+    height: 10px;
+    transform: translateX(-100%) translateY(0);
+  }
+
+  25% {
+    top: 0;
+    left: 100%;
+    width: 10px;
+    height: 50px;
+    transform: translateX(-100%) translateY(0);
+  }
+
+  45% {
+    top: 100%;
+    left: 100%;
+    width: 10px;
+    height: 50px;
+    transform: translateX(-100%) translateY(-100%);
+  }
+
+  50% {
+    top: 100%;
+    left: 100%;
+    width: 50px;
+    height: 10px;
+    transform: translateX(-100%) translateY(-100%);
+  }
+  70% {
+    top: 100%;
+    left: 0;
+    width: 50px;
+    height: 10px;
+    transform: translateX(0) translateY(-100%);
+  }
+  75% {
+    top: 100%;
+    left: 0;
+    width: 10px;
+    height: 50px;
+    transform: translateX(0) translateY(-100%);
+  }
+  95% {
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 50px;
+    transform: translateX(0) translateY(0);
+  }
+
+  100% {
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 10px;
+    transform: translateX(0) translateY(0);
+  }
+}
+.sparkle-train {
+  position: absolute;
+  background: radial-gradient(circle, #2563EB 90%);
+  box-shadow: 0 0 12px 6px #2563EB;
+  border-radius: 10px;
+  animation: sparklePath 6s linear infinite;
+  z-index: 20;
+}
+
+
+
+.bg-gold {
+  background: radial-gradient(circle, #d4af37 30%, rgba(212, 175, 55, 0.1) 70%);
+}
+
+.bg-silver {
+  background: radial-gradient(circle, #8913ce 30%, rgba(192, 192, 192, 0.1) 70%);
+}
+
+.bg-whitey {
+  background: radial-gradient(circle, #ffffff 30%, rgba(255, 255, 255, 0.1) 70%);
+}
+.bg-blue {
+  background: radial-gradient(circle, #2563EB 30%, rgba(255, 255, 255, 0.1) 70%);
+}
+
+.bubble {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.3);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes burst {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.animate-burst {
+  animation: burst 4s ease-out infinite;
+}
+
+/* Random directions using CSS variables */
+.bubble:nth-child(3) { --x: -150; --y: -100px; }
+.bubble:nth-child(4) { --x: 120px; --y: -80px; }
+.bubble:nth-child(5) { --x: -100px; --y: 120px; }
+.bubble:nth-child(6) { --x: 80px; --y: 150px; }
+.bubble:nth-child(7) { --x: 0px; --y: -180px; }
+.bubble:nth-child(8) { --x: -100px; --y: -90px; }
