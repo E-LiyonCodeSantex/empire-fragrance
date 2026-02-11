@@ -7,10 +7,13 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
+    "outDir": "./dist",
+    "rootDir": "./src",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["*"]
     }
   },
-  "include": ["src", "types", "services", "models", "server/types", "../client/pages/admin/reviews"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
