@@ -72,13 +72,13 @@ app.get('/', (req, res) => {
 });
 
 // Connect to DB and start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 connectDB()
   .then(async () => {
     await seedAdmin();
 
-    /*
+    /*a
     // Start the email bank transfer poller once DB is connected
     startEmailBankTransferPoller().catch((err) => {
       console.error("❌ Failed to start email poller:", err);
