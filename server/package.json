@@ -23,8 +23,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "module-alias": "^2.3.4", 
-    "...": "...",
+    "module-alias": "^2.3.4",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.8.0",
