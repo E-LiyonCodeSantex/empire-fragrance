@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const validateRegister_1 = require("@/middleware/validateRegister");
+const accountController_1 = require("@/controllers/user/accountController");
+const router = (0, express_1.Router)();
+router.get("/user/me", validateRegister_1.authMiddleware, accountController_1.getMe);
+router.get("/orders/mine", validateRegister_1.authMiddleware, accountController_1.getUserOrders);
+router.get("/payments", validateRegister_1.authMiddleware, accountController_1.getPayments);
+router.post("/payments", validateRegister_1.authMiddleware, accountController_1.savePayment);
+router.post("/user/password", validateRegister_1.authMiddleware, accountController_1.updatePassword);
+router.put("/user/preferences", validateRegister_1.authMiddleware, accountController_1.updatePreferences);
+router.post("/auth/logout", validateRegister_1.authMiddleware, accountController_1.logout);
+exports.default = router;
