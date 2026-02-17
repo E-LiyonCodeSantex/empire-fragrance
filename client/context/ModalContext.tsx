@@ -11,7 +11,7 @@ interface ModalProviderProps {
 
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [activeModal, setActiveModal] = useState<
-  null | 'register' | 'login' | 'forgotPassword' | 'verifyCode' | 'resetPassword'
+  null | 'register' | 'login' | 'forgotPassword' | 'verifyCode' | 'updateProfile' | 'resetPassword'
   >(null);
    const router = useRouter();
 

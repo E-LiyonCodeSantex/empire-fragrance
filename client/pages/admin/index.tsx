@@ -31,13 +31,13 @@ interface OrdersTrend {
 const AdminDashboard = () => {
   const [stats, setStats] = useState<any>(null);
   const [ordersTrend, setOrdersTrend] = useState<OrdersTrend | null>(null);
-  const {currentUser, loading, logout } = useAuth();
+  const { currentUser, loading, logout } = useAuth();
   const { setActiveModal } = useModal();
 
   const router = useRouter();
 
-    const handleLogout = () => {
-       alert("Are you sure you want to logout?");
+  const handleLogout = () => {
+    alert("Are you sure you want to logout?");
     logout();
     router.push("/");
   }
@@ -84,16 +84,16 @@ const AdminDashboard = () => {
     <div className="px-6 pt-14 pb-6 min-h-screen ">
       <h1 className="text-3xl font-bold mb-6 flex flex-col justify-center items-center text-gray-600">Admin Dashboard</h1>
 
-       <h1 className="text-xl md:text-2xl font-bold text-gray-900 mt-4">
-                    Welcome, {currentUser?.userName}
-                  </h1>
+      <h1 className="text-xl md:text-2xl font-bold text-gray-900 mt-4">
+        Welcome, {currentUser?.userName}
+      </h1>
 
-                      <button
-                onClick={handleLogout}
-                className="flex justify-center items-center w-full mt-4 mb-6 px-4 py-2 rounded-lg bg-gray-800 hover:bg-black text-white"
-              >
-                <ArrowRightEndOnRectangleIcon className="w-5 h-5" /> Logout
-              </button>
+      <button
+        onClick={handleLogout}
+        className="flex justify-center items-center w-full mt-4 mb-6 px-4 py-2 rounded-lg bg-gray-800 hover:bg-black text-white"
+      >
+        <ArrowRightEndOnRectangleIcon className="w-5 h-5" /> Logout
+      </button>
 
       {/* KPI Cards */}
       <div className="grid md:grid-cols-4 text-gray-600 gap-6 mb-8">
@@ -105,6 +105,7 @@ const AdminDashboard = () => {
             <h2 className="font-bold">Profile</h2>
           </div>
           <div className="flex flex-col justify-center items-start gap-2">
+
             <p>Email: {currentUser?.email}</p>
             <p>Username: {currentUser?.userName}</p>
           </div>
