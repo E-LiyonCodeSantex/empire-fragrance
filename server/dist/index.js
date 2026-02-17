@@ -23,7 +23,7 @@ const orderRoutes_1 = __importDefault(require("@/routes/orderRoutes"));
 const app = (0, express_1.default)();
 // Middleware
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:3000',
+    origin: 'https://empire-fragrance-api.onrender.com',
     credentials: true
 }));
 app.use(express_1.default.json());
