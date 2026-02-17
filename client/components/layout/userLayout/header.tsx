@@ -79,7 +79,7 @@ export default function Header() {
                 <div className="flex justify-between items-center border-2 border-gray-400 gap-2 bg-gray-300 xs:relative absolute top-20 xs:top-0 mx-4 ">
                     <MagnifyingGlassIcon className="w-[40px] sm:w-[50px] h-[40px] sm:h-[50px] flex justify-center items-center text-primary hover:text-hoverPrimary" />
                     <input type="text"
-                        placeholder="BSearch products by name, brands, category..."
+                        placeholder="Search products by name, brands, category..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="outline-none p-2 w-full max-w-[600px] min-w-300px] text-gray-700"

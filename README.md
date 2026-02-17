@@ -121,12 +121,12 @@ npm install
 Create .env.local in client/:
 
 env
-NEXT_PUBLIC_API_URL=http://localhost:5000/api
+NEXT_PUBLIC_API_URL=https://empire-fragrance-api.onrender.com/
 Start frontend:
 
 bash
 npm run dev
-Frontend runs at: http://localhost:3000
+Frontend runs at: http://localhost:3000 and at: https://empire-fragrance-akwq.vercel.app/
 
 📚 API Endpoints
 Authentication

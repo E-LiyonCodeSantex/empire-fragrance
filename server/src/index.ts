@@ -25,7 +25,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'https://empire-fragrance-akwq.vercel.app/',
+  origin: 'https://empire-fragrance-akwq.vercel.app',
   credentials: true
 }));
 app.use(express.json());
