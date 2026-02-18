@@ -25,9 +25,13 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'https://empire-fragrance-akwq.vercel.app',
+  origin: [
+    "http://localhost:3000",
+    "https://empire-fragrance-akwq.vercel.app"
+  ],
   credentials: true
 }));
+
 app.use(express.json());
 
 // Routes

@@ -2,6 +2,14 @@
 import api from "@/utils/axiosInstance";
 import { ProductCardProps } from "@/interface";
 
+
+interface ProductResponse { 
+  success: boolean; 
+  message: string; 
+  product: ProductCardProps; 
+}
+
+
 export async function fetchProducts(): Promise<ProductCardProps[]> {
   const res = await api.get<ProductCardProps[]>("/api/products");
   return res.data;
@@ -9,22 +17,22 @@ export async function fetchProducts(): Promise<ProductCardProps[]> {
 
 export async function fetchProductById(id: string): Promise<ProductCardProps> {
   const res = await api.get<ProductCardProps>(`/api/products/${id}`);
-  return res.data;
+  return res.data as ProductCardProps;
 }
 
-export const createProduct = async (data: FormData) => {
-  const res = await api.post("/api/products", data, {
+export const createProduct = async (data: FormData): Promise<ProductCardProps> => {
+  const res = await api.post<ProductResponse>("/api/products", data, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 
-  return res.data;
+  return res.data.product;
 };  
 
-export const updateProduct = async (id: string, data: FormData) => {
-  const res = await api.put(`/api/products/${id}`, data, {
+export const updateProduct = async (id: string, data: FormData): Promise<ProductCardProps> => {
+  const res = await api.put<ProductResponse>(`/api/products/${id}`, data, {
     headers: { "Content-Type": "multipart/form-data" },
   });
-  return res.data;
+  return res.data.product;
 };
 
 export const deleteProduct = async (id: string) =>{

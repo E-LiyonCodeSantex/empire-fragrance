@@ -1,3 +1,4 @@
+import withAdminAuth from "@/utils/withAdminAuth";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import api from "@/utils/axiosInstance";
@@ -10,7 +11,7 @@ interface User {
     createdAt: string;
 }
 
-export default function AdminUserDetails() {
+const AdminUserDetails = () => {
     const router = useRouter();
     const { id } = router.query;
 
@@ -75,3 +76,5 @@ export default function AdminUserDetails() {
         </main>
     );
 }
+
+export default withAdminAuth(AdminUserDetails);

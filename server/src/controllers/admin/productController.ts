@@ -46,8 +46,6 @@ export const addProduct = async (req: Request, res: Response) => {
   }
 };
 
-
-
 // GET /api/admin/products
 export const getProducts = async (req: Request, res: Response) => {
   try {
@@ -58,7 +56,6 @@ export const getProducts = async (req: Request, res: Response) => {
     return res.status(500).json({ success: false, message: "Server error. Could not fetch products." });
   }
 };
-
 
 // GET /api/admin/products/:id
 export const getProductById = async (req: Request, res: Response) => {

@@ -1,10 +1,11 @@
+import withAdminAuth from "@/utils/withAdminAuth";
 import { useEffect, useState } from "react";
 import api from "@/utils/axiosInstance";
 import { ShippingRule } from "@/interface";
 import Head from "next/head";
 
 
-export default function ShippingRulesPage() {
+const ShippingRulesPage = () => {
     const [rules, setRules] = useState<ShippingRule[]>([]);
     const [form, setForm] = useState({ state: "", price: 2000, freeShippingThreshold: "" });
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -117,3 +118,5 @@ export default function ShippingRulesPage() {
         </>
     );
 }
+
+export default withAdminAuth(ShippingRulesPage);

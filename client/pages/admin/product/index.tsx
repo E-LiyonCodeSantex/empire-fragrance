@@ -1,4 +1,4 @@
-
+import withAdminAuth from "@/utils/withAdminAuth";
 import AdminProductCard from "@/components/common/adminProductCard";
 import { ProductCardProps } from "@/interface/index";
 import { useQuery } from "@tanstack/react-query";
@@ -38,4 +38,4 @@ const Products = () => {
 }
 
 
-export default Products;
+export default withAdminAuth(Products);

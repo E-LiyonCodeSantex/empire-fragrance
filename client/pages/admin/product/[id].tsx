@@ -1,10 +1,10 @@
 
 // pages/product/[id].tsx
+import withAdminAuth from "@/utils/withAdminAuth";
 import { useRouter } from 'next/router';
 import Image from "next/image";
 import { XMarkIcon, StarIcon } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
-import PopUpCard from '@/components/common/popUpCard';
 import { ProductCardProps } from '@/interface/index';
 import { useCart } from "@/context/useCart";
 import api from '@/utils/axiosInstance';
@@ -21,7 +21,7 @@ const ProductDetails = () => {
     const [reviews, setReviews] = useState<any[]>([]);
 
     useEffect(() => {
-        if (!id) return;
+        if (!id || typeof id !== "string") return;
 
         const fetchProduct = async () => {
             try {
@@ -140,7 +140,7 @@ const ProductDetails = () => {
     );
 };
 
-export default ProductDetails;
+export default withAdminAuth(ProductDetails);
 
 
 

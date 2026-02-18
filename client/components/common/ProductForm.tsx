@@ -6,7 +6,7 @@ import { ProductCardProps } from "@/interface";
 
 interface ProductFormProps {
   initialData?: ProductCardProps; // if editing
-  onSuccess: () => void;
+  onSuccess: (product: ProductCardProps) => void;
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSuccess }) => {
@@ -32,14 +32,15 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSuccess }) => 
   const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
   const router = useRouter();
 
-  const mutation = useMutation({
-    mutationFn: (data: FormData) => initialData
-      ? updateProduct(initialData._id, data)
+  const mutation = useMutation<ProductCardProps, Error, FormData>({
+    mutationFn: (data: FormData) => 
+      initialData ? 
+    updateProduct(initialData._id, data)
       : createProduct(data),
-    onSuccess: () => {
+    onSuccess: (savedProduct) => {
       setIsLoading(false);
       setMessage({ type: "success", text: `Product ${initialData ? "updated" : "created"} successfully!` });
-      onSuccess();
+      onSuccess(savedProduct);
     },
     onError: (err: any) => {
       setIsLoading(false);
@@ -92,7 +93,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSuccess }) => 
     } else {
       mutation.mutate(payload);
     }
-    router.push('/admin/products');
   };
 
 
@@ -196,7 +196,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSuccess }) => 
         />
       </label>
       <label htmlFor="tags" className="flex flex-col gap-1">
-        <span className="font-medium">Tags</span>
+        <span className="font-medium">Tags (type comma to give space)</span>
         <input
           type="text"
           name="tags"
