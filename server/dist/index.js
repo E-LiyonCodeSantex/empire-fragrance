@@ -21,10 +21,21 @@ const accountRoutes_1 = __importDefault(require("@/routes/accountRoutes"));
 const cartRoutes_1 = __importDefault(require("@/routes/cartRoutes"));
 const orderRoutes_1 = __importDefault(require("@/routes/orderRoutes"));
 const app = (0, express_1.default)();
-// Middleware
+const allowedOrigins = [
+    "https://empire-fragrance-akwq.vercel.app",
+    "https://empire-fragrance-webapp.vercel.app",
+    "http://localhost:3000"
+];
 app.use((0, cors_1.default)({
-    origin: 'https://empire-fragrance-api.onrender.com',
-    credentials: true
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
 }));
 app.use(express_1.default.json());
 // Routes

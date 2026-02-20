@@ -18,8 +18,13 @@ export const adminForgotPassword = async (req: Request, res: Response) => {
   await admin.save();
 
   const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+    host: process.env.EMAIL_HOST,
+    port: parseInt(process.env.EMAIL_PORT!),
+    secure: process.env.EMAIL_SECURE === "true",
+    auth: { 
+      user: process.env.EMAIL_USER, 
+      pass: process.env.EMAIL_PASS 
+    },
   });
 
   await transporter.sendMail({
@@ -67,7 +72,6 @@ export const adminResetPassword = async (req: Request, res: Response) => {
 
   res.json({ message: "Password reset successful" });
 };
-
 
 export const adminUpdateProfile = async (req: Request, res: Response) => {
   const { newUserName, newEmail, currentPassword } = req.body;
