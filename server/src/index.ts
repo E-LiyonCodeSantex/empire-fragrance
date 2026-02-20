@@ -23,14 +23,22 @@ import orderRoutes from "@/routes/orderRoutes";
 const app = express();
 
 
-// Middleware
+const allowedOrigins = [
+  "https://empire-fragrance-akwq.vercel.app",
+  "http://localhost:3000"
+];
+
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://empire-fragrance-akwq.vercel.app"
-  ],
-  credentials: true
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 }));
+
 
 app.use(express.json());
 

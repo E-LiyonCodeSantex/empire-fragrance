@@ -105,7 +105,6 @@ export const updateProduct = async (req: Request, res: Response) => {
   }
 };
 
-
 // Delete product
 export const deleteProduct = async (req: Request, res: Response) => {
   try {
