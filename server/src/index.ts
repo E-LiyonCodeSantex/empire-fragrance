@@ -25,6 +25,7 @@ const app = express();
 
 const allowedOrigins = [
   "https://empire-fragrance-akwq.vercel.app",
+  "https://empire-fragrance-webapp.vercel.app",
   "http://localhost:3000"
 ];
 
