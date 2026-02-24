@@ -62,12 +62,10 @@ const seedAdmin = async () => {
   try {
     const existingAdmin = await Admin.findOne({ email: process.env.ADMIN_EMAIL });
     if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD!, 12);
-
       const admin = new Admin({
         userName: process.env.ADMIN_USERNAME || "admin",
         email: process.env.ADMIN_EMAIL,
-        password: hashedPassword,
+        password: process.env.ADMIN_PASSWORD!,
         termsAccepted: true,
       });
 
