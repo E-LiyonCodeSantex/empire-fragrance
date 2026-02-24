@@ -6,7 +6,6 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import connectDB from "@/config/db";
-import bcrypt from "bcryptjs";
 import Admin from "@/models/admin";
 //import { startEmailBankTransferPoller } from "../services/emailBankTransfer";
 
@@ -58,6 +57,7 @@ app.use("/api/orders", orderRoutes);
 
 
 //create admin if not created already
+// create admin if not created already
 const seedAdmin = async () => {
   try {
     const existingAdmin = await Admin.findOne({ email: process.env.ADMIN_EMAIL });
@@ -65,11 +65,11 @@ const seedAdmin = async () => {
       const admin = new Admin({
         userName: process.env.ADMIN_USERNAME || "admin",
         email: process.env.ADMIN_EMAIL,
-        password: process.env.ADMIN_PASSWORD!,
+        password: process.env.ADMIN_PASSWORD!, // plain text here
         termsAccepted: true,
       });
 
-      await admin.save();
+      await admin.save(); // pre-save hook will hash once
       console.log("✅ Admin user created");
     } else {
       console.log("ℹ️ Admin already exists");
@@ -78,6 +78,7 @@ const seedAdmin = async () => {
     console.error("❌ Error seeding admin:", err);
   }
 };
+
 
 
 app.get('/', (req, res) => {
