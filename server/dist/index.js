@@ -9,7 +9,6 @@ dotenv_1.default.config();
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const db_1 = __importDefault(require("@/config/db"));
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const admin_1 = __importDefault(require("@/models/admin"));
 //import { startEmailBankTransferPoller } from "../services/emailBankTransfer";
 // Routes
@@ -49,18 +48,18 @@ app.use("/api/cart", cartRoutes_1.default);
 app.use("/api/account", accountRoutes_1.default);
 app.use("/api/orders", orderRoutes_1.default);
 //create admin if not created already
+// create admin if not created already
 const seedAdmin = async () => {
     try {
         const existingAdmin = await admin_1.default.findOne({ email: process.env.ADMIN_EMAIL });
         if (!existingAdmin) {
-            const hashedPassword = await bcryptjs_1.default.hash(process.env.ADMIN_PASSWORD, 12);
             const admin = new admin_1.default({
                 userName: process.env.ADMIN_USERNAME || "admin",
                 email: process.env.ADMIN_EMAIL,
-                password: hashedPassword,
+                password: process.env.ADMIN_PASSWORD, // plain text here
                 termsAccepted: true,
             });
-            await admin.save();
+            await admin.save(); // pre-save hook will hash once
             console.log("✅ Admin user created");
         }
         else {

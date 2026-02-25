@@ -29,7 +29,7 @@ const userForgotPassword = async (req, res) => {
         subject: "Password Reset Code from Empire Fragrance.",
         html: `<p>Your reset code is <b>${code}</b>. It expires in 10 minutes.</p>`,
     });
-    res.json({ message: "Reset code sent" });
+    res.json({ message: "Reset code generated." });
 };
 exports.userForgotPassword = userForgotPassword;
 // Step 2: Verify Code

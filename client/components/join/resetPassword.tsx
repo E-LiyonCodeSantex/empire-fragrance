@@ -1,33 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import api from "@/utils/axiosInstance";
+import emailjs from "emailjs-com";
 
 interface resetPasswordModalProps {
     isOpen: boolean;
     onClose: () => void;
-    setActiveModal: (modal: 'register' | 'login' | 'forgotPassword' | 'verifyCode' | 'resetPassword' | null) => void;
+    setActiveModal: (modal: 'register' | 'login' | 'forgotPassword' | 'verifyCode' | 'resetPassword' | null
+    ) => void;
     role: "admin" | "user";
 }
 
-const ResetPasswordModal: React.FC<resetPasswordModalProps> = ({ isOpen, onClose, setActiveModal, role }) => {
+const ResetPasswordModal: React.FC<resetPasswordModalProps> = ({ 
+    isOpen, 
+    onClose, 
+    setActiveModal, 
+    role 
+}) => {
 
     const [message, setMessage] = useState<{ type: 'error' | 'success'; text: string } | null>(null);
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // ✅ Pull email + code from localStorage 
-    const email = typeof window !== "undefined" ? (localStorage.getItem("resetEmail") ?? "").toLowerCase() : "";
-    const code = typeof window !== "undefined" ? (localStorage.getItem("resetCode") ?? "") : "";
+    const [email, setEmail] = useState(""); 
+    const [code, setCode] = useState(""); 
 
+    useEffect(() => { 
+        if (typeof window !== "undefined") { 
+            setEmail(localStorage.getItem("resetEmail") ?? ""); 
+            setCode(localStorage.getItem("resetCode") ?? ""); 
+        } 
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
         if (newPassword !== confirmPassword) {
             setMessage({ type: 'error', text: 'Passwords do not match.' });
             return;
         }
         try {
+            setLoading(true);
             await api.post(`/api/${role}/reset-password`, {
                 email,
                 code,
@@ -35,12 +49,13 @@ const ResetPasswordModal: React.FC<resetPasswordModalProps> = ({ isOpen, onClose
             });
 
             setMessage({ type: 'success', text: "Password reset successfully!" });
-            setLoading(false);
             setActiveModal('login');
         } catch (error) {
             setLoading(false);
             setMessage({ type: 'error', text: 'Failed to reset password. Please try again.' });
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -129,3 +144,37 @@ const ResetPasswordModal: React.FC<resetPasswordModalProps> = ({ isOpen, onClose
 }
 
 export default ResetPasswordModal;
+
+
+
+/**
+ *   // ✅ Pull email + code from localStorage 
+    const [email, setEmail] = useState("");
+    const [code, setCode] = useState("");
+
+    // ✅ Load values from localStorage (set earlier when user requested reset) 
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setEmail((localStorage.getItem("resetEmail") ?? "").toLowerCase());
+            setCode(localStorage.getItem("resetCode") ?? "");
+        }
+    }, []);
+
+    // ✅ Send reset email via EmailJS 
+    const sendResetEmail = async (userEmail: string, resetCode: string) => {
+        try {
+            await emailjs.send(
+                "your_service_id", // from EmailJS dashboard 
+                "your_template_id", // template with {{userEmail}} and {{resetCode}} 
+                {
+                    userEmail,
+                    resetCode,
+                },
+                "your_public_key" // from EmailJS account 
+            );
+            console.log("Reset email sent successfully");
+        } catch (err) {
+            console.error("Failed to send reset email:", err);
+        }
+    };
+ */

@@ -5,11 +5,17 @@ import api from "@/utils/axiosInstance";
 interface verifyCodeModalProps {
     isOpen: boolean;
     onClose: () => void;
-    setActiveModal: (modal: 'register' | 'login' | 'forgotPassword' | 'verifyCode' | 'resetPassword' | null) => void;
+    setActiveModal: (modal: 'register' | 'login' | 'forgotPassword' | 'verifyCode' | 'resetPassword' | null
+    ) => void;
     role: "admin" | "user";
 }
 
-const VerifyCodeModal: React.FC<verifyCodeModalProps> = ({ isOpen, onClose, setActiveModal, role }) => {
+const VerifyCodeModal: React.FC<verifyCodeModalProps> = ({ 
+    isOpen, 
+    onClose, 
+    setActiveModal, 
+    role
+ }) => {
 
     const [message, setMessage] = useState<{ type: 'error' | 'success'; text: string } | null>(null);
 
@@ -28,16 +34,17 @@ const VerifyCodeModal: React.FC<verifyCodeModalProps> = ({ isOpen, onClose, setA
             await api.post(`/api/${role}/verify-code`,
                 { email: email.toLowerCase(), code: code.toString() }
             );
+            localStorage.setItem("resetCode", code.toString());
 
             setMessage({ type: 'success', text: "Code verified successfully!" });
-            setLoading(false);
-
+      
             setActiveModal('resetPassword');
-            localStorage.setItem("resetCode", code.toString());
         } catch (error) {
             setLoading(false);
             setMessage({ type: 'error', text: 'Invalid or expired code. Please try again.' });
             console.error(error);
+        } finally{
+            setLoading(false);
         }
     };
 

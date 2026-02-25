@@ -1,50 +1,48 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
-import nodemailer from "nodemailer";
 import Admin from "@/models/admin";
 import bcrypt from "bcryptjs";
 
+
 // Step 1: Forgot Password
 export const adminForgotPassword = async (req: Request, res: Response) => {
-  const { email } = req.body;
-  const admin = await Admin.findOne({ 
-    email: email.toLowerCase(),
-  });
-  if (!admin) return res.status(404).json({ message: "Admin not found" });
+  try {
+    const { email } = req.body;
+    const admin = await Admin.findOne({ email: email.toLowerCase() });
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
 
-  const code = crypto.randomInt(100000, 999999).toString();
-  admin.resetCode = code.toString();
-  admin.resetCodeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 min
-  await admin.save();
+    // Generate a 6-digit reset code
+    const resetCode = crypto.randomInt(100000, 999999).toString();
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: parseInt(process.env.EMAIL_PORT!),
-    secure: process.env.EMAIL_SECURE === "true",
-    auth: { 
-      user: process.env.EMAIL_USER, 
-      pass: process.env.EMAIL_PASS 
-    },
-  });
+    // Save code + expiry in DB
+    admin.resetCode = resetCode;
+    admin.resetCodeExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+    await admin.save();
 
-  await transporter.sendMail({
-    to: admin.email,
-    subject: "Admin Password Reset Code from Empire Fragrance",
-    html: `<p>Your reset code is <b>${code}</b>. It expires in 10 minutes.</p>`,
-  });
-
-  res.json({ message: "Reset code sent" });
+    // Return code and email to frontend
+    res.json({
+      resetCode,          // ✅ variable name matches
+      userEmail: admin.email,
+      message: "Reset code generated successfully",
+    });
+  } catch (err) {
+    console.error("❌ Error generating reset code:", err);
+    res.status(500).json({ message: "Server error. Please try again." });
+  }
 };
+
 
 // Step 2: Verify Code
 export const adminVerifyCode = async (req: Request, res: Response) => {
   const { email, code } = req.body;
-  const admin = await Admin.findOne({ 
-    email: email.toLowerCase(), 
-    resetCode: code.toString(), 
-    resetCodeExpires: { $gt: new Date() }, 
+  const admin = await Admin.findOne({
+    email: email.toLowerCase(),
+    resetCode: code.toString(),
+    resetCodeExpires: { $gt: new Date() },
   });
-  
+
   if (!admin) {
     return res.status(400).json({ message: "Code not found or expired. Please request a new one." });
   }
@@ -54,12 +52,12 @@ export const adminVerifyCode = async (req: Request, res: Response) => {
 // Step 3: Reset Password
 export const adminResetPassword = async (req: Request, res: Response) => {
   const { email, code, newPassword } = req.body;
-  
-  const admin = await Admin.findOne({ 
-    email: email.toLowerCase(), 
-    resetCode: code.toString(), 
+
+  const admin = await Admin.findOne({
+    email: email.toLowerCase(),
+    resetCode: code.toString(),
     resetCodeExpires: { $gt: new Date() },
-   });
+  });
 
   if (!admin) {
     return res.status(400).json({ message: "Code not found or expired. Please request a new one." });

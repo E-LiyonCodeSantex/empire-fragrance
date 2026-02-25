@@ -28,7 +28,7 @@ export const userForgotPassword = async (req: Request, res: Response) => {
     html: `<p>Your reset code is <b>${code}</b>. It expires in 10 minutes.</p>`,
   });
 
-  res.json({ message: "Reset code sent" });
+  res.json({ message: "Reset code generated." });
 };
 
 // Step 2: Verify Code

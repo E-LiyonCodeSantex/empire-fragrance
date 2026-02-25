@@ -5,31 +5,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminUpdateProfile = exports.adminResetPassword = exports.adminVerifyCode = exports.adminForgotPassword = void 0;
 const crypto_1 = __importDefault(require("crypto"));
-const nodemailer_1 = __importDefault(require("nodemailer"));
 const admin_1 = __importDefault(require("@/models/admin"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 // Step 1: Forgot Password
 const adminForgotPassword = async (req, res) => {
-    const { email } = req.body;
-    const admin = await admin_1.default.findOne({
-        email: email.toLowerCase(),
-    });
-    if (!admin)
-        return res.status(404).json({ message: "Admin not found" });
-    const code = crypto_1.default.randomInt(100000, 999999).toString();
-    admin.resetCode = code.toString();
-    admin.resetCodeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 min
-    await admin.save();
-    const transporter = nodemailer_1.default.createTransport({
-        service: "gmail",
-        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-    });
-    await transporter.sendMail({
-        to: admin.email,
-        subject: "Admin Password Reset Code from Empire Fragrance",
-        html: `<p>Your reset code is <b>${code}</b>. It expires in 10 minutes.</p>`,
-    });
-    res.json({ message: "Reset code sent" });
+    try {
+        const { email } = req.body;
+        const admin = await admin_1.default.findOne({ email: email.toLowerCase() });
+        if (!admin) {
+            return res.status(404).json({ message: "Admin not found" });
+        }
+        // Generate a 6-digit reset code
+        const resetCode = crypto_1.default.randomInt(100000, 999999).toString();
+        // Save code + expiry in DB
+        admin.resetCode = resetCode;
+        admin.resetCodeExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+        await admin.save();
+        // Return code and email to frontend
+        res.json({
+            resetCode, // ✅ variable name matches
+            userEmail: admin.email,
+            message: "Reset code generated successfully",
+        });
+    }
+    catch (err) {
+        console.error("❌ Error generating reset code:", err);
+        res.status(500).json({ message: "Server error. Please try again." });
+    }
 };
 exports.adminForgotPassword = adminForgotPassword;
 // Step 2: Verify Code
