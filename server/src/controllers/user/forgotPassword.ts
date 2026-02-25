@@ -6,29 +6,31 @@ import User from "@/models/user";
 
 // Step 1: Forgot Password
 export const userForgotPassword = async (req: Request, res: Response) => {
-  const { email } = req.body;
-  const user = await User.findOne({ 
-    email: email.toLowerCase(),
-   });
-  if (!user) return res.status(404).json({ message: "User not found" });
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
 
-  const code = crypto.randomInt(100000, 999999).toString();
-  user.resetCode = code.toString();
-  user.resetCodeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 min
-  await user.save();
+    // Generate a 6-digit reset code
+    const resetCode = crypto.randomInt(100000, 999999).toString();
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-  });
+    // Save code + expiry in DB
+    user.resetCode = resetCode;
+    user.resetCodeExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+    await user.save();
 
-  await transporter.sendMail({
-    to: user.email,
-    subject: "Password Reset Code from Empire Fragrance.",
-    html: `<p>Your reset code is <b>${code}</b>. It expires in 10 minutes.</p>`,
-  });
-
-  res.json({ message: "Reset code generated." });
+    // Return code and email to frontend
+    res.json({
+      resetCode,          // ✅ variable name matches
+      userEmail: user.email,
+      message: "Reset code generated successfully",
+    });
+  } catch (err) {
+    console.error("❌ Error generating reset code:", err);
+    res.status(500).json({ message: "Server error. Please try again." });
+  }
 };
 
 // Step 2: Verify Code

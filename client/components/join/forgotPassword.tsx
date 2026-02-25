@@ -38,7 +38,7 @@ const ForgotPasswordModal: React.FC<forgotPasswordModalProps> = ({
             const res = await api.post<ForgotPasswordResponse>(`/api/${role}/forgot-password`, { email: email.toLowerCase() });
 
             const { resetCode, userEmail } = res.data;
-            console.log("data from backend:", res.data);
+            //console.log("data from backend:", res.data);
 
             localStorage.setItem("resetEmail", userEmail);
             localStorage.setItem("resetCode", resetCode);
