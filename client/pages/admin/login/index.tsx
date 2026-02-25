@@ -1,11 +1,17 @@
 // pages/admin/login.tsx
 import { useModal } from "@/context/ModalContext";
+import Head from "next/head";
 
 export default function AdminLoginPage() {
   const { setActiveModal } = useModal();
 
   // Open the login modal immediately
   return (
+    <>
+     <Head>
+            <title>Admin | Contact</title>
+          </Head>
+    
     <div className="flex flex-col gap-4 items-center h-screen justify-center h-screen bg-gray-100 z-60 p-2">
       <p className="text-gray-700">You have to login as admin to access this page.</p>
       <button
@@ -15,5 +21,6 @@ export default function AdminLoginPage() {
         Open Admin Login
       </button>
     </div>
+    </>
   );
 }

@@ -257,7 +257,7 @@ export const adminUpdateCancelStatus = async (req: Request, res: Response) => {
 export const calculateShipping = async (req: Request, res: Response) => { 
     try { 
         const { subtotal, state } = req.body; 
-        const defaultPrice = 2000; 
+        const defaultPrice = 5000; 
         const rule = await ShippingRule.findOne({ state }); 
         let fee = defaultPrice; 
         if (rule) { 

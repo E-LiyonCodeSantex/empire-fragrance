@@ -7,7 +7,7 @@ import Head from "next/head";
 
 const ShippingRulesPage = () => {
     const [rules, setRules] = useState<ShippingRule[]>([]);
-    const [form, setForm] = useState({ state: "", price: 2000, freeShippingThreshold: "" });
+    const [form, setForm] = useState({ state: "", price: 5000, freeShippingThreshold: "" });
     const [editingId, setEditingId] = useState<string | null>(null);
 
     // Fetch rules
@@ -30,7 +30,7 @@ const ShippingRulesPage = () => {
                 const { data } = await api.post<ShippingRule>("/api/admin/shipping-rules", form);
                 setRules([...rules, data]);
             }
-            setForm({ state: "", price: 2000, freeShippingThreshold: "" });
+            setForm({ state: "", price: 5000, freeShippingThreshold: "" });
         } catch (err: any) {
             alert(err?.response?.data?.message || "Error saving rule");
         }
@@ -56,7 +56,7 @@ const ShippingRulesPage = () => {
     return (
         <>
             <Head>
-                <title>Admin | Orders Dashboard</title>
+                <title>Admin | SShipping rules</title>
             </Head>
 
             <main className="px-4 pt-16 pb-6 text-gray-700">
